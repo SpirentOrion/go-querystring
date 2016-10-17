@@ -25,6 +25,8 @@ type SubNested struct {
 func TestValues_types(t *testing.T) {
 	str := "string"
 	strPtr := &str
+	tym := time.Date(2000, 1, 1, 12, 34, 56, 0, time.UTC)
+	tymPtr := &tym
 
 	tests := []struct {
 		in   interface{}
@@ -107,19 +109,22 @@ func TestValues_types(t *testing.T) {
 			struct {
 				A time.Time
 				B time.Time `url:",unix"`
-				C bool      `url:",int"`
-				D bool      `url:",int"`
+				C *time.Time
+				D bool `url:",int"`
+				E bool `url:",int"`
 			}{
-				A: time.Date(2000, 1, 1, 12, 34, 56, 0, time.UTC),
-				B: time.Date(2000, 1, 1, 12, 34, 56, 0, time.UTC),
-				C: true,
-				D: false,
+				A: tym,
+				B: tym,
+				C: tymPtr,
+				D: true,
+				E: false,
 			},
 			url.Values{
 				"A": {"2000-01-01T12:34:56Z"},
 				"B": {"946730096"},
-				"C": {"1"},
-				"D": {"0"},
+				"C": {"2000-01-01T12:34:56Z"},
+				"D": {"1"},
+				"E": {"0"},
 			},
 		},
 		{
